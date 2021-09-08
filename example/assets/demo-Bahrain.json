@@ -1,0 +1,55 @@
+{
+    "timeLimit": 60,
+    "timeoutMessage": "OCR Reached Time Limit",
+    "enableUploaded": true,
+    "logOcr":true,
+    "invalidParamsErr":"OCR parameters are invalid, please refer to console for more details.",
+    "cameraSettings":
+        {
+            "resolutionPreset" : "medium",
+            "exposureMode":"auto",
+            "exposureOffset" : 0.0,
+            "focusMode":"auto",
+            "flashMode":"auto",
+            "direction" : "back", 
+            "zoomable": true 
+        },
+    "rois": [
+        {
+            "name": "MrzBean",
+            "left": 25.0,
+            "top": 72.0,
+            "width": 75.0,
+            "height": 87.5,
+            "ignoreResult": false,
+            "drawRect": true,
+            "borderStyle": {
+                "color": "0xFFff00",
+                "strokeWidth": 1.0
+            },
+            "headerText": "MRZ",
+            "headerStyle" : {
+                "color": "0xFFff00",
+                "textAlign" : "left",
+                "textDirection": "ltr",
+                "fontStyle": ""
+            },
+            "language": "OCRB",
+            "confidence": 40,
+
+            "interwordSpaces": "1",
+            "dpi": "70",
+            "pageSegMode": "SINGLE_BLOCK",
+            "preProcessors": ["TRIM", "REMOVESPACES", "TOUPPER"],
+            "validators": ["Passport"],
+            "postProcessors": ["Passport"],
+            "showText" : true,
+            "ocrStyle" : {
+                "color": "0xFFff00",
+                "textAlign" : "left",
+                "textDirection": "ltr",
+                "fontStyle": ""
+            }
+        }
+    ]
+}
