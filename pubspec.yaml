@@ -1,6 +1,6 @@
 name: tesseract
 description: A flutter plugin for tesseract based on Android Tesseract and IOS SiwftyTesseract. It has unicode (UTF-8) support, and can recognize more than 100 languages.
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/sikandernoori/tesseract
 
 environment:
@@ -31,9 +31,9 @@ flutter:
     platforms:
       android:
         package: com.hunaindev.tesseract
-        pluginClass: FlutterTesseractPlugin
+        pluginClass: TesseractPlugin
       ios:
-        pluginClass: FlutterTesseractPlugin
+        pluginClass: TesseractPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

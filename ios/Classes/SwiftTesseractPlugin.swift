@@ -2,7 +2,7 @@ import Flutter
 import UIKit
 import SwiftyTesseract
 
-public class SwiftFlutterTesseractPlugin: NSObject, FlutterPlugin {
+public class SwiftTesseractPlugin: NSObject, FlutterPlugin {
     
     var bundle: Bundle!
     var swiftyTesseract: SwiftyTesseract!
@@ -20,7 +20,7 @@ public class SwiftFlutterTesseractPlugin: NSObject, FlutterPlugin {
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "tesseract", binaryMessenger: registrar.messenger())
-        let instance = SwiftFlutterTesseractPlugin()
+        let instance = SwiftTesseractPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
     
