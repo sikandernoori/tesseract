@@ -17,7 +17,7 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-    expect(await FlutterTesseract.initTesseract(), true);
+  test('initTesseract', () async {
+    expect(await Tesseract.initTesseract(language: "eng"), true);
   });
 }
