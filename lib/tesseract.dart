@@ -8,7 +8,7 @@ import 'package:path/path.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
-class FlutterTesseract {
+class Tesseract {
   static const String TESS_DATA_CONFIG = 'assets/tessdata_config.json';
   static const String TESS_DATA_PATH = 'assets/tessdata';
   static const MethodChannel _channel = const MethodChannel('tesseract');

@@ -1,4 +1,4 @@
-#import "FlutterTesseractPlugin.h"
+#import "TesseractPlugin.h"
 #if __has_include(<tesseract/tesseract-Swift.h>)
 #import <tesseract/tesseract-Swift.h>
 #else
@@ -8,8 +8,8 @@
 #import "tesseract-Swift.h"
 #endif
 
-@implementation FlutterTesseractPlugin
+@implementation TesseractPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  [SwiftFlutterTesseractPlugin registerWithRegistrar:registrar];
+  [SwiftTesseractPlugin registerWithRegistrar:registrar];
 }
 @end
