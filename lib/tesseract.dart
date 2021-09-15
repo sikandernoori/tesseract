@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io' as IO;
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:archive/archive.dart';
 import 'package:path/path.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -94,21 +93,13 @@ class Tesseract {
           data.offsetInBytes,
           data.lengthInBytes,
         );
-        // Decode the Zip file
-        final archive = ZipDecoder().decodeBytes(bytes);
 
-        for (final file in archive) {
-          final filename = file.name;
-          if (file.isFile) {
-            final data = file.content as List<int>;
-            File(tessdataDirectory + "/" + filename)
-              ..createSync(recursive: true)
-              ..writeAsBytesSync(data);
-          } else {
-            print("No File detected");
-            print(file);
-          }
-        }
+        var content = GZipCodec().decode(bytes);
+        File(tessdataDirectory +
+            "/" +
+            zipFile.toString().substring(0, zipFile.toString().length - 3))
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(content);
       }
     } catch (ex) {
       print(" >>>>>>>> Error Occured while Copying tessData: " + ex.toString());

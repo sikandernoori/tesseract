@@ -1,6 +1,6 @@
 {
   "files": [
-    "eng.traineddata.zip",
-    "OCRB.traineddata.zip"
+    "eng.traineddata.gz",
+    "ocrb.traineddata.gz"
   ]
 }
