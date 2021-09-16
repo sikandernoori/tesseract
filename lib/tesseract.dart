@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io' as IO;
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:path/path.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -16,7 +15,6 @@ class Tesseract {
     if (IO.Platform.isIOS) {
       String tessData = await _loadTessData();
       tessData = tessData + "/tessdata";
-      print("TessData Directory: " + tessData);
       final bool status =
           await _channel.invokeMethod('initswiftyTesseract', <String, dynamic>{
         'tessData': tessData,
@@ -33,7 +31,6 @@ class Tesseract {
       {String? language, Map? args}) async {
     if (IO.Platform.isAndroid) {
       final String tessData = await _loadTessData();
-      print("Tess Data PAth: " + tessData);
       final bool status =
           await _channel.invokeMethod('initTesseract', <String, dynamic>{
         'tessData': tessData,
@@ -70,7 +67,18 @@ class Tesseract {
 
   static Future<String> _loadTessData() async {
     final IO.Directory appDirectory = await getApplicationDocumentsDirectory();
-    final String tessdataDirectory = join(appDirectory.path, 'tessdata');
+    final String tessdataDirectory = appDirectory.path + '/tessdata';
+
+    if (await IO.Directory(tessdataDirectory).exists()) {
+      if (Platform.isIOS) {
+        print("TessData Directory Already exists: " +
+            appDirectory.path +
+            "/tessdata");
+      } else {
+        print("TessData Directory Already exists: " + appDirectory.path);
+      }
+      return appDirectory.path;
+    }
 
     if (!await IO.Directory(tessdataDirectory).exists()) {
       await IO.Directory(tessdataDirectory).create();

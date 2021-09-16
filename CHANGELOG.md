@@ -1,3 +1,7 @@
+## 0.0.5
+
+Compressed Traineddata format changed to .gz
+
 ## 0.0.4
 
 Android workspace Fixes

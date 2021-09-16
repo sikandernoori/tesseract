@@ -105,6 +105,10 @@ public class SwiftTesseractPlugin: NSObject, FlutterPlugin {
                 result("iOS could not recognize flutter arguments in method: (sendParams)")
                 return
             }
+
+            // var finalResult: [String:Any]
+
+            
             
             let params: [String : Any] = args as! [String : Any]
             let imgD: FlutterStandardTypedData? = params["imageData"] as? FlutterStandardTypedData
@@ -116,29 +120,28 @@ public class SwiftTesseractPlugin: NSObject, FlutterPlugin {
             
             let whiteList = tesseractArgs?["whiteList"] as? String
             let blackList = tesseractArgs?["blackList"] as? String
-
-            if(language != LAST_LANGUAGE)
+            let workItem = DispatchWorkItem{
+                if(language != self.LAST_LANGUAGE)
             {
-                swiftyTesseract = SwiftyTesseract.init(
+                    self.swiftyTesseract = SwiftyTesseract.init(
                     language: .custom((language as String?)!),
-                    dataSource: dataSource,
+                        dataSource: self.dataSource,
                     engineMode: EngineMode.lstmOnly)
-//                swiftyTesseract.whiteList = "1234567890-"
             }
-            if(whiteList != LAST_WHITELIST)
+                if(whiteList != self.LAST_WHITELIST)
             {
-                swiftyTesseract.whiteList = whiteList
-                LAST_WHITELIST = whiteList
+                    self.swiftyTesseract.whiteList = whiteList
+                    self.LAST_WHITELIST = whiteList
             }
-            if(blackList != LAST_BLACKLIST)
+                if(blackList != self.LAST_BLACKLIST)
             {
-                swiftyTesseract.blackList = blackList
-                LAST_BLACKLIST = blackList
+                    self.swiftyTesseract.blackList = blackList
+                    self.LAST_BLACKLIST = blackList
             }
-            if(preserve_interword_spaces != LAST_PRESERVE_INTERWORD_SPACES)
+                if(preserve_interword_spaces != self.LAST_PRESERVE_INTERWORD_SPACES)
             {
-                swiftyTesseract.preserveInterwordSpaces = preserve_interword_spaces
-                LAST_PRESERVE_INTERWORD_SPACES = preserve_interword_spaces
+                    self.swiftyTesseract.preserveInterwordSpaces = preserve_interword_spaces
+                    self.LAST_PRESERVE_INTERWORD_SPACES = preserve_interword_spaces
             }
             
             let imageBytes : Data
@@ -146,10 +149,12 @@ public class SwiftTesseractPlugin: NSObject, FlutterPlugin {
             
             guard let image = UIImage(data: imageBytes) else { return}
             
-            let res: Result<String, Error> = swiftyTesseract.performOCR(on: image)
             
             
-            guard let blockResult = swiftyTesseract.recognizedBlocks(for: ResultIteratorLevel.block) as Result<[RecognizedBlock], Error>?
+                let res: Result<String, Error> = self.swiftyTesseract.performOCR(on: image)
+            
+            
+                guard let blockResult = self.swiftyTesseract.recognizedBlocks(for: ResultIteratorLevel.block) as Result<[RecognizedBlock], Error>?
             else
             {
                 NSLog("Error")
@@ -172,8 +177,15 @@ public class SwiftTesseractPlugin: NSObject, FlutterPlugin {
                 result(myDictionary)
 
             })
+            }
 
-            return
+            workItem.notify(queue: .main){
+                NSLog("Notified")
+                return
+            }
+            
+            let queue = DispatchQueue.global(qos: .background)
+            queue.async(execute: workItem)
 //            swiftyTesseract.performOCR(on: image) { recognizedString in
 //                guard let extractText = recognizedString else { return }
 //                result(extractText)
