@@ -1,11 +1,9 @@
 import 'dart:io';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:tesseract/tesseract.dart';
 
-late List<CameraDescription> cameras;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  cameras = await availableCameras();
   runApp(MyApp());
 }
 
@@ -41,6 +39,12 @@ class Home extends StatelessWidget {
                 children: [
                   //TODO Add Example
 
+                  ElevatedButton(
+                      onPressed: () {
+                        initTesseract();
+                      },
+                      child: Text('Init Tesseract'))
+
                   // CustomCard(
                   //   label: 'Tesseract OCR',
                   //   featureStatus: FeatureStatus.Both,
@@ -53,6 +57,11 @@ class Home extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  initTesseract() async {
+    var result = await Tesseract.initTesseract(language: 'eng');
+    print(result);
   }
 }
 

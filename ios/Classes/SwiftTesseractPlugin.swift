@@ -32,7 +32,7 @@ public class SwiftTesseractPlugin: NSObject, FlutterPlugin {
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if(call.method == "initswiftyTesseract")
+        if(call.method == "initTesseract")
         {
             guard let args = call.arguments else {
                 result("iOS could not recognize flutter arguments in method: (sendParams)")
@@ -46,8 +46,8 @@ public class SwiftTesseractPlugin: NSObject, FlutterPlugin {
             let tesseractArgs: [String : Any]? = params["args"] as? [String : Any]
             let preserve_interword_spaces: Bool = tesseractArgs?["preserve_interword_spaces"] as? Bool ?? true
             
-            let whiteList = tesseractArgs?["whiteList"] as? String
-            let blackList = tesseractArgs?["blackList"] as? String
+            let whiteList = tesseractArgs?["whitelist"] as? String
+            let blackList = tesseractArgs?["blacklist"] as? String
 
             if(dataSource == nil)
             {
@@ -118,8 +118,8 @@ public class SwiftTesseractPlugin: NSObject, FlutterPlugin {
             let tesseractArgs: [String : Any]? = params["args"] as? [String : Any]
             let preserve_interword_spaces: Bool = tesseractArgs?["preserve_interword_spaces"] as? Bool ??  true
             
-            let whiteList = tesseractArgs?["whiteList"] as? String
-            let blackList = tesseractArgs?["blackList"] as? String
+            let whiteList = tesseractArgs?["whitelist"] as? String
+            let blackList = tesseractArgs?["blacklist"] as? String
             let workItem = DispatchWorkItem{
                 if(language != self.LAST_LANGUAGE)
             {
@@ -180,7 +180,6 @@ public class SwiftTesseractPlugin: NSObject, FlutterPlugin {
             }
 
             workItem.notify(queue: .main){
-                NSLog("Notified")
                 return
             }
             

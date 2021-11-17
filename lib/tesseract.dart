@@ -1,56 +1,25 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io' as IO;
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart'
+    show getApplicationDocumentsDirectory;
 
 class Tesseract {
-  static const String TESS_DATA_CONFIG = 'assets/tessdata_config.json';
   static const String TESS_DATA_PATH = 'assets/tessdata';
   static const MethodChannel _channel = const MethodChannel('tesseract');
 
-  static Future<bool> initTesseractIOS({String? language, Map? args}) async {
-    if (IO.Platform.isIOS) {
-      String tessData = await _loadTessData();
-      tessData = tessData + "/tessdata";
-      final bool status =
-          await _channel.invokeMethod('initswiftyTesseract', <String, dynamic>{
-        'tessData': tessData,
-        'language': language,
-        'args': args,
-      });
-      return status;
-    } else {
-      return false;
-    }
-  }
-
-  static Future<bool> initTesseractAndroid(
-      {String? language, Map? args}) async {
-    if (IO.Platform.isAndroid) {
-      final String tessData = await _loadTessData();
-      final bool status =
-          await _channel.invokeMethod('initTesseract', <String, dynamic>{
-        'tessData': tessData,
-        'language': language,
-        'args': args,
-      });
-      return status;
-    } else {
-      return false;
-    }
-  }
-
-  static Future<bool> initTesseract({String? language, Map? args}) async {
-    if (IO.Platform.isIOS) {
-      return initTesseractIOS(language: language, args: args);
-    } else if (IO.Platform.isAndroid) {
-      return initTesseractAndroid(language: language, args: args);
-    } else {
-      return false;
-    }
+  static Future<bool> initTesseract(
+      {required String language, Map? args}) async {
+    final String tessData = await _loadTessData(language);
+    final bool status =
+        await _channel.invokeMethod('initTesseract', <String, dynamic>{
+      'tessData': tessData,
+      'language': language,
+      'args': args,
+    });
+    return status;
   }
 
   static Future<Map> performOCR(
@@ -65,50 +34,42 @@ class Tesseract {
     return extractMap;
   }
 
-  static Future<String> _loadTessData() async {
+  static Future<String> _loadTessData(String prefix) async {
     final IO.Directory appDirectory = await getApplicationDocumentsDirectory();
     final String tessdataDirectory = appDirectory.path + '/tessdata';
 
-    if (await IO.Directory(tessdataDirectory).exists()) {
-      if (Platform.isIOS) {
-        print("TessData Directory Already exists: " +
-            appDirectory.path +
-            "/tessdata");
-      } else {
-        print("TessData Directory Already exists: " + appDirectory.path);
-      }
-      return appDirectory.path;
-    }
-
     if (!await IO.Directory(tessdataDirectory).exists()) {
       await IO.Directory(tessdataDirectory).create();
+    } else {
+      print('TessData directory already exists.');
     }
-    await _copyTessDataToAppDocumentsDirectory(tessdataDirectory);
+
+    var filePath = '$tessdataDirectory/$prefix.traineddata';
+    if (!await IO.File(filePath).exists()) {
+      await _copyTessDataToAppDocumentsDirectory(filePath, prefix);
+    } else {
+      print('Trained data file already exists.');
+    }
 
     return appDirectory.path;
   }
 
   static Future _copyTessDataToAppDocumentsDirectory(
-      String tessdataDirectory) async {
+      String filePath, String prefix) async {
     try {
-      final String config = await rootBundle.loadString(TESS_DATA_CONFIG);
-      Map<String, dynamic> files = jsonDecode(config);
-      for (var zipFile in files["files"]) {
-        final ByteData data =
-            await rootBundle.load(TESS_DATA_PATH + "/" + zipFile);
+      final ByteData data =
+          await rootBundle.load('$TESS_DATA_PATH/$prefix.traineddata.gz');
 
-        final Uint8List bytes = data.buffer.asUint8List(
-          data.offsetInBytes,
-          data.lengthInBytes,
-        );
+      final Uint8List bytes = data.buffer.asUint8List(
+        data.offsetInBytes,
+        data.lengthInBytes,
+      );
 
-        var content = GZipCodec().decode(bytes);
-        File(tessdataDirectory +
-            "/" +
-            zipFile.toString().substring(0, zipFile.toString().length - 3))
-          ..createSync(recursive: true)
-          ..writeAsBytesSync(content);
-      }
+      var content = GZipCodec().decode(bytes);
+      File(filePath)
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(content);
+      print('Trained data file copied');
     } catch (ex) {
       print(" >>>>>>>> Error Occured while Copying tessData: " + ex.toString());
     }

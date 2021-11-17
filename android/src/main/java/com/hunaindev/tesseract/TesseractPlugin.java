@@ -71,7 +71,7 @@ public class TesseractPlugin implements FlutterPlugin, MethodCallHandler {
     
       if(args != null && baseApi != null){
         for (Map.Entry<String, String> entry : args.entrySet()) {
-          if(entry.getKey().equals("PageSegMode"))
+          if(entry.getKey().equals("pageSegMode"))
           {
             if(LAST_PAGE_SEG_ID != Integer.parseInt(entry.getValue()) && entry.getValue().length() > 0)
             {
@@ -81,12 +81,12 @@ public class TesseractPlugin implements FlutterPlugin, MethodCallHandler {
           }
           else
           {
-            if(entry.getKey().equals("whiteList") && LAST_WHITELIST != entry.getValue() && entry.getValue() != null)
+            if(entry.getKey().equals("whitelist") && LAST_WHITELIST != entry.getValue() && entry.getValue() != null)
             {
               baseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST,  entry.getValue());
               LAST_WHITELIST = entry.getValue();
             }
-            else if(entry.getKey().equals("blackList") && LAST_BLACKLIST != entry.getValue() && entry.getValue() != null)
+            else if(entry.getKey().equals("blacklist") && LAST_BLACKLIST != entry.getValue() && entry.getValue() != null)
             {
               baseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, entry.getValue());
               LAST_BLACKLIST = entry.getValue();
@@ -125,7 +125,7 @@ public class TesseractPlugin implements FlutterPlugin, MethodCallHandler {
 
         if(args != null && baseApi != null){
           for (Map.Entry<String, String> entry : args.entrySet()) {
-            if(entry.getKey().equals("PageSegMode"))
+            if(entry.getKey().equals("pageSegMode"))
             {
               if(LAST_PAGE_SEG_ID != Integer.parseInt(entry.getValue()) && entry.getValue().length() > 0)
               {
@@ -135,12 +135,12 @@ public class TesseractPlugin implements FlutterPlugin, MethodCallHandler {
             }
             else
             {
-              if(entry.getKey().equals("whiteList") && LAST_WHITELIST != entry.getValue() && entry.getValue() != null)
+              if(entry.getKey().equals("whitelist") && LAST_WHITELIST != entry.getValue() && entry.getValue() != null)
               {
                 baseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST,  entry.getValue());
                 LAST_WHITELIST = entry.getValue();
               }
-              else if(entry.getKey().equals("blackList") && LAST_BLACKLIST != entry.getValue() && entry.getValue() != null)
+              else if(entry.getKey().equals("blacklist") && LAST_BLACKLIST != entry.getValue() && entry.getValue() != null)
               {
                 baseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, entry.getValue());
                 LAST_BLACKLIST = entry.getValue();

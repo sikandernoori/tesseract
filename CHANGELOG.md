@@ -1,3 +1,11 @@
+## 0.0.7
+
+code refactor
+
+## 0.0.6
+
+IOS Multi-Threading Added to Keep UI Responsive
+
 ## 0.0.5
 
 Compressed Traineddata format changed to .gz

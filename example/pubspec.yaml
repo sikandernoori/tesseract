@@ -9,14 +9,6 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter_json_viewer: ^1.0.1
-  image: ^3.0.2
-  logger: ^1.1.0
-  camera: ^0.9.2+2
-  cryptoutils: ^0.5.0
-  path_provider: ^2.0.2
-  flutter_isolate: 2.0.1-pre
-  flutter_js: ^0.5.0+3
 
   flutter:
     sdk: flutter
