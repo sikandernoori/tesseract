@@ -12,7 +12,8 @@ class Tesseract {
 
   static Future<bool> initTesseract(
       {required String language, Map? args}) async {
-    final String tessData = await _loadTessData(language);
+    String tessData = await _loadTessData(language);
+    tessData = IO.Platform.isIOS ? tessData + "/tessdata" : tessData;
     final bool status =
         await _channel.invokeMethod('initTesseract', <String, dynamic>{
       'tessData': tessData,
