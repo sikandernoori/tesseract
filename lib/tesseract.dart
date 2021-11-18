@@ -45,7 +45,6 @@ class Tesseract {
       print('TessData directory already exists.');
     }
     for (var p in prefix.split('+')) {
-      print('prefix was : $p');
       var filePath = '$tessdataDirectory/$p.traineddata';
       if (!await IO.File(filePath).exists()) {
         await _copyTessDataToAppDocumentsDirectory(filePath, p);
