@@ -44,12 +44,14 @@ class Tesseract {
     } else {
       print('TessData directory already exists.');
     }
-
-    var filePath = '$tessdataDirectory/$prefix.traineddata';
-    if (!await IO.File(filePath).exists()) {
-      await _copyTessDataToAppDocumentsDirectory(filePath, prefix);
-    } else {
-      print('Trained data file already exists.');
+    for (var p in prefix.split('+')) {
+      print('prefix was : $p');
+      var filePath = '$tessdataDirectory/$p.traineddata';
+      if (!await IO.File(filePath).exists()) {
+        await _copyTessDataToAppDocumentsDirectory(filePath, p);
+      } else {
+        print('Trained data file already exists.');
+      }
     }
 
     return appDirectory.path;
